@@ -839,6 +839,7 @@ Temporary Items
 # Include any specific files here.
 
 *.freezed.dart
+*.g.dart
 *.config.dart
 
 ### ---------------------------- References ---------------------------- ###

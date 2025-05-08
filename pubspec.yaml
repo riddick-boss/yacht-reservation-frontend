@@ -48,7 +48,7 @@ dependencies:
   json_annotation: ^4.9.0
 
   # Storage
-  flutter_secure_storage: ^9.2.4
+  # flutter_secure_storage: ^4.2.1
   shared_preferences: ^2.5.3
 
   # Utils

@@ -26,16 +26,16 @@ class _SplashView extends StatelessWidget {
     return BlocListener<SplashCubit, SplashState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        // switch (state.status) {
-        //   case Status.authenticated:
-        //     context.go(Routes.home);
-        //     break;
-        //   case Status.unauthenticated:
-        //     context.go(Routes.login);
-        //     break;
-        //   default:
-        //     break;
-        // }
+        switch (state.status) {
+          case Status.authenticated:
+            context.go(Routes.home);
+            break;
+          case Status.unauthenticated:
+            context.go(Routes.login);
+            break;
+          default:
+            break;
+        }
       },
       child: Scaffold(
         backgroundColor: AppColors.background,

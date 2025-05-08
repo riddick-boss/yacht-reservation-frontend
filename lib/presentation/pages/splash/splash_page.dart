@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/splash/cubit/splash_cubit.dart';
+import 'package:yacht_reservation_frontend/presentation/theme/app_colors.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -37,7 +38,7 @@ class _SplashView extends StatelessWidget {
         // }
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: AppColors.background,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -53,15 +54,13 @@ class _SplashView extends StatelessWidget {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.primary.withAlpha(25),
+                        color: AppColors.primary.withAlpha(25),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         Icons.directions_boat,
                         size: 60,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: AppColors.primary,
                       ),
                     ),
                   );
@@ -80,14 +79,14 @@ class _SplashView extends StatelessWidget {
                         context,
                       ).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: AppColors.primary,
                       ),
                     ),
                   );
                 },
               ),
               const SizedBox(height: 48),
-              CircularProgressIndicator(),
+              CircularProgressIndicator(color: AppColors.primary),
             ],
           ),
         ),

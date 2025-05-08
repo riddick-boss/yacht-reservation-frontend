@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   runApp(const MyApp());
 }
 

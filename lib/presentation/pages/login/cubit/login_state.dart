@@ -1,5 +1,7 @@
 part of 'login_cubit.dart';
 
+enum NavDestination { none, home }
+
 @freezed
 abstract class LoginState with _$LoginState {
   const factory LoginState({
@@ -10,5 +12,6 @@ abstract class LoginState with _$LoginState {
     String? errorMessage,
     String? emailError,
     String? passwordError,
+    @Default(NavDestination.none) NavDestination navDestination,
   }) = _LoginState;
 }

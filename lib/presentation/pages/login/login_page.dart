@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
+import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/login/cubit/login_cubit.dart';
 import 'package:yacht_reservation_frontend/presentation/theme/app_colors.dart';
 
@@ -23,7 +25,13 @@ class _LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        // Handle state changes here
+        switch (state.navDestination) {
+          case NavDestination.home:
+            context.go(Routes.home);
+            break;
+          default:
+            break;
+        }
       },
       builder: (context, state) {
         final cubit = context.read<LoginCubit>();
@@ -63,11 +71,7 @@ class _Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(
-          Icons.directions_boat,
-          size: 64,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+        Icon(Icons.directions_boat, size: 64, color: AppColors.primary),
         const SizedBox(height: 16),
         Text(
           'Yacht Reservation',

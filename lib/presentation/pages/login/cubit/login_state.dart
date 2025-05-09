@@ -10,8 +10,6 @@ abstract class LoginState with _$LoginState {
     @Default(false) bool isLoading,
     @Default(false) bool isValid,
     String? errorMessage,
-    String? emailError,
-    String? passwordError,
     @Default(NavDestination.none) NavDestination navDestination,
   }) = _LoginState;
 }

@@ -15,6 +15,7 @@ class SplashCubit extends Cubit<SplashState> {
   final AuthService authService;
 
   Future<void> _checkLogin() async {
+    await Future.delayed(const Duration(milliseconds: 1500));
     final isLoggedIn = await authService.isLoggedIn();
     emit(
       state.copyWith(

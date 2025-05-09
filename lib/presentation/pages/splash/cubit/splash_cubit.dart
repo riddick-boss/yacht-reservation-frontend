@@ -1,7 +1,8 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yacht_reservation_frontend/domain/services/auth_service.dart';
+
 part 'splash_state.dart';
 part 'splash_cubit.freezed.dart';
 
@@ -14,6 +15,7 @@ class SplashCubit extends Cubit<SplashState> {
   final AuthService authService;
 
   Future<void> _checkLogin() async {
+    await Future.delayed(const Duration(milliseconds: 1500));
     final isLoggedIn = await authService.isLoggedIn();
     emit(
       state.copyWith(

@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:yacht_reservation_frontend/data/datasource/auth/auth_local_datasource.dart';
 import 'package:yacht_reservation_frontend/data/datasource/auth/auth_remote_datasource.dart';
 import 'package:yacht_reservation_frontend/domain/services/auth_service.dart';
 import 'package:yacht_reservation_frontend/domain/util/app_logger.dart';
@@ -6,12 +7,18 @@ import 'package:yacht_reservation_frontend/domain/util/app_logger.dart';
 @Injectable(as: AuthService)
 class AuthServiceImpl implements AuthService {
   final AuthRemoteDatasource _loginRemoteDatasource;
+  final AuthLocalDatasource _authLocalDatasource;
 
-  AuthServiceImpl(this._loginRemoteDatasource);
+  AuthServiceImpl(this._loginRemoteDatasource, this._authLocalDatasource);
 
   @override
   Future<bool> isLoggedIn() async {
     try {
+      final jwt = _authLocalDatasource.getJwt();
+      if (jwt == null) {
+        AppLogger.i('No JWT found');
+        return false;
+      }
       final isJwtValid = await _loginRemoteDatasource.validateJwt();
       return isJwtValid;
     } catch (e) {
@@ -22,6 +29,7 @@ class AuthServiceImpl implements AuthService {
 
   @override
   Future<void> login(String email, String password) async {
-    // TODO: implement login
+    final loginResponse = await _loginRemoteDatasource.login(email, password);
+    _authLocalDatasource.saveJwt(loginResponse.jwt);
   }
 }

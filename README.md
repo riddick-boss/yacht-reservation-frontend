@@ -15,7 +15,38 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-### Flutter useful commands:
+## Project Setup
+
+1. Run `flutter pub get` to install dependencies
+2. Run `dart run build_runner build --delete-conflicting-outputs` to generate code
+3. Ready to go! 🚀
+
+## Used Libraries
+
+### Core Dependencies
+- **Dependency Injection**
+  - `get_it`
+  - `injectable`
+
+- **State Management**
+  - `flutter_bloc`
+
+- **Navigation**
+  - `go_router`
+
+- **Network**
+  - `dio`
+  - `json_annotation`
+
+- **Storage**
+  - `shared_preferences`
+
+- **Utils**
+  - `logger`
+  - `freezed_annotation`
+
+## Flutter useful commands
+
 - flutter pub add
 - flutter pub add dev:
 - flutter pub remove

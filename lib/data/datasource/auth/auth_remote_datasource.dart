@@ -10,19 +10,19 @@ class AuthRemoteDatasource {
   AuthRemoteDatasource(this.dio);
 
   Future<bool> validateJwt() async {
-    return Future.delayed(
-      const Duration(seconds: 5),
-      () => false,
-    ); //TODO: remove once endpoint ready, added just for testing
-    final response = await dio.get('/auth/validate-jwt');
+    // return Future.delayed(
+    //   const Duration(seconds: 5),
+    //   () => false,
+    // );
+    final response = await dio.get('/auth/validate-token');
     return response.statusCode == 200;
   }
 
   Future<LoginResponse> login(String email, String password) async {
-    return Future.delayed(
-      const Duration(seconds: 4),
-      () => LoginResponse(jwt: 'sampleJwtToken'),
-    ); // TODO: remove once endpoint ready, added just for testing
+    // return Future.delayed(
+    //   const Duration(seconds: 4),
+    //   () => LoginResponse(jwt: 'sampleJwtToken'),
+    // );
     final response = await dio.post(
       '/auth/login',
       data: {'email': email, 'password': password},

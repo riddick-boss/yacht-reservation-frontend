@@ -8,7 +8,7 @@ abstract class NetworkModule {
   Dio provideDio(JwtInterceptor jwtInterceptor) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'http://localhost:8080', // TODO: change once backend is ready
+        baseUrl: 'https://yacht-reservation-backend.onrender.com',
         connectTimeout: const Duration(seconds: 120),
         receiveTimeout: const Duration(seconds: 120),
       ),

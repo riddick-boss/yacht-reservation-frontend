@@ -30,6 +30,6 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<void> login(String email, String password) async {
     final loginResponse = await _loginRemoteDatasource.login(email, password);
-    _authLocalDatasource.saveJwt(loginResponse.jwt);
+    _authLocalDatasource.saveJwt(loginResponse.jwtToken);
   }
 }

@@ -51,6 +51,7 @@ class _LoginView extends StatelessWidget {
                     onEmailChanged: cubit.emailChanged,
                     onPasswordChanged: cubit.passwordChanged,
                     onLoginPressed: cubit.login,
+                    onRegisterPressed: cubit.register,
                   ),
                   const SizedBox(height: 24),
                   const _ResetPasswordButton(),
@@ -91,13 +92,14 @@ class _LoginForm extends StatelessWidget {
     required this.onEmailChanged,
     required this.onPasswordChanged,
     required this.onLoginPressed,
+    required this.onRegisterPressed,
   });
 
   final LoginState state;
   final ValueChanged<String> onEmailChanged;
   final ValueChanged<String> onPasswordChanged;
   final VoidCallback onLoginPressed;
-
+  final VoidCallback onRegisterPressed;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -108,6 +110,11 @@ class _LoginForm extends StatelessWidget {
         _PasswordField(onPasswordChanged),
         const SizedBox(height: 24),
         _LoginButton(isLoading: state.isLoading, onPressed: onLoginPressed),
+        const SizedBox(height: 24),
+        _RegisterButton(
+          isLoading: state.isLoading,
+          onPressed: onRegisterPressed,
+        ),
       ],
     );
   }
@@ -174,6 +181,21 @@ class _LoginButton extends StatelessWidget {
                 )
                 : const Text('Login'),
       ),
+    );
+  }
+}
+
+class _RegisterButton extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback onPressed;
+
+  const _RegisterButton({required this.isLoading, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: isLoading ? null : onPressed,
+      child: const Text('Register'),
     );
   }
 }

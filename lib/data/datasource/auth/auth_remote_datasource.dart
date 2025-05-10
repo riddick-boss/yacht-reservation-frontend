@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yacht_reservation_frontend/data/datasource/auth/dto/login_response.dart';
+import 'package:yacht_reservation_frontend/data/datasource/auth/dto/register_response.dart';
 import 'package:yacht_reservation_frontend/domain/util/app_logger.dart';
 
 @injectable
@@ -29,5 +30,14 @@ class AuthRemoteDatasource {
     );
     AppLogger.i('login response: $response');
     return LoginResponse.fromJson(response.data);
+  }
+
+  Future<RegisterResponse> register(String email, String password) async {
+    final response = await dio.post(
+      '/auth/register',
+      data: {'email': email, 'password': password},
+    );
+    AppLogger.i('register response: $response');
+    return RegisterResponse.fromJson(response.data);
   }
 }

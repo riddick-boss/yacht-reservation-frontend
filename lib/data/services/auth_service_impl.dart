@@ -32,4 +32,13 @@ class AuthServiceImpl implements AuthService {
     final loginResponse = await _loginRemoteDatasource.login(email, password);
     _authLocalDatasource.saveJwt(loginResponse.jwtToken);
   }
+
+  @override
+  Future<void> register(String email, String password) async {
+    final registerResponse = await _loginRemoteDatasource.register(
+      email,
+      password,
+    );
+    _authLocalDatasource.saveJwt(registerResponse.jwtToken);
+  }
 }

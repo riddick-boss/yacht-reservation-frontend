@@ -37,4 +37,21 @@ class LoginCubit extends Cubit<LoginState> {
       );
     }
   }
+
+  Future<void> register() async {
+    emit(state.copyWith(isLoading: true, errorMessage: null));
+    try {
+      await authService.register(state.email, state.password);
+      emit(
+        state.copyWith(isLoading: false, navDestination: NavDestination.home),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: 'Registration failed. Please try again.',
+        ),
+      );
+    }
+  }
 }

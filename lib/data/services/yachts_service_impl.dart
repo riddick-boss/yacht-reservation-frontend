@@ -30,5 +30,6 @@ class YachtMapper {
     length: response.length,
     crewNum: response.crewNum,
     price: response.price,
+    isAvailable: response.isAvailable,
   );
 }

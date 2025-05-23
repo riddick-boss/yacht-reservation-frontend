@@ -11,5 +11,6 @@ abstract class Yacht with _$Yacht {
     required int length,
     required int crewNum,
     required int price,
+    required bool isAvailable,
   }) = _Yacht;
 }

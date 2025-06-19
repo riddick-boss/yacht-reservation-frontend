@@ -905,7 +905,7 @@ Future<void> _openYachtingTips() async {
   final uri = Uri.parse(
     'https://www.boatinternational.com/yachts/editorial-features',
   );
-  if (!await launchUrl(uri)) {
+  if (!await launchUrl(uri, mode: LaunchMode.inAppWebView)) {
     debugPrint('Could not launch $uri');
   }
 }

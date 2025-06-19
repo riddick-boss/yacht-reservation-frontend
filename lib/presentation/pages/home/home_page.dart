@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
@@ -297,7 +299,6 @@ class PromotionsBanner extends StatelessWidget {
             const SizedBox(width: 8),
             ElevatedButton(
               onPressed: () {},
-              child: const Text('Book Now'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: theme.primaryColor,
                 foregroundColor: Colors.white,
@@ -305,6 +306,7 @@ class PromotionsBanner extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
+              child: const Text('Book Now'),
             ),
           ],
         ),

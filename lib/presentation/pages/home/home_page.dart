@@ -7,6 +7,7 @@ import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
 import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/home/cubit/home_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -643,7 +644,9 @@ class QuickActionsWidget extends StatelessWidget {
           _QuickActionButton(
             icon: Icons.add_circle_outline,
             label: 'Book Now',
-            onTap: () {},
+            onTap: () {
+              context.push(Routes.yachts);
+            },
             color: theme.primaryColor,
           ),
           _QuickActionButton(
@@ -655,7 +658,7 @@ class QuickActionsWidget extends StatelessWidget {
           _QuickActionButton(
             icon: Icons.info_outline,
             label: 'Yachting Tips',
-            onTap: () {},
+            onTap: _openYachtingTips,
             color: Colors.blueAccent,
           ),
         ],
@@ -694,5 +697,14 @@ class _QuickActionButton extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+Future<void> _openYachtingTips() async {
+  final uri = Uri.parse(
+    'https://www.boatinternational.com/yachts/editorial-features',
+  );
+  if (!await launchUrl(uri)) {
+    debugPrint('Could not launch $uri');
   }
 }

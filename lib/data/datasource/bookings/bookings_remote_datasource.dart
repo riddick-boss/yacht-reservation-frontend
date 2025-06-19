@@ -9,7 +9,7 @@ class BookingsRemoteDatasource {
   BookingsRemoteDatasource(this.dio);
 
   Future<void> book(int yachtId, String day) async {
-    await dio.get('/bookings/book', data: {'yachtId': yachtId, 'day': day});
+    await dio.post('/bookings/book', data: {'yachtId': yachtId, 'day': day});
   }
 
   Future<void> cancel(int bookingId) async {

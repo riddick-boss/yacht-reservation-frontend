@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/yachts/cubit/yachts_cubit.dart';
+import 'package:yacht_reservation_frontend/presentation/widget/booking_bottom_sheet.dart';
 
 class YachtsPage extends StatelessWidget {
   const YachtsPage({super.key});
@@ -36,7 +37,6 @@ class _YachtsView extends StatelessWidget {
           ),
           body: switch (state) {
             Loading() => const _LoadingView(),
-            Error(:final message) => _ErrorView(message: message),
             Loaded(:final yachts) => _YachtsListView(yachts: yachts),
           },
         );
@@ -53,16 +53,6 @@ class _LoadingView extends StatelessWidget {
   }
 }
 
-class _ErrorView extends StatelessWidget {
-  final String message;
-  const _ErrorView({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Error: $message'));
-  }
-}
-
 class _YachtsListView extends StatelessWidget {
   final List<Yacht> yachts;
   const _YachtsListView({required this.yachts});
@@ -75,7 +65,12 @@ class _YachtsListView extends StatelessWidget {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 20),
-          child: YachtListItem(yacht: yachts[index]),
+          child: YachtListItem(
+            yacht: yachts[index],
+            onBookClick: (yacht, date) async {
+              await context.read<YachtsCubit>().bookYacht(yacht.id, date);
+            },
+          ),
         );
       },
     );
@@ -84,7 +79,23 @@ class _YachtsListView extends StatelessWidget {
 
 class YachtListItem extends StatelessWidget {
   final Yacht yacht;
-  const YachtListItem({super.key, required this.yacht});
+  final Future<void> Function(Yacht, DateTime) onBookClick;
+  const YachtListItem({
+    super.key,
+    required this.yacht,
+    required this.onBookClick,
+  });
+
+  void _showReservationDialog(BuildContext context, Yacht yacht) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return BookingBottomSheet(yacht: yacht, onBookClick: onBookClick);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +239,7 @@ class YachtListItem extends StatelessWidget {
                         onPressed:
                             yacht.isAvailable
                                 ? () {
-                                  // TODO: Implement reservation action
+                                  _showReservationDialog(context, yacht);
                                 }
                                 : null,
                         icon: Icon(

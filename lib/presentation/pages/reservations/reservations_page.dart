@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yacht_reservation_frontend/domain/models/reservation.dart';
@@ -48,6 +50,7 @@ class _ReservationsView extends StatelessWidget {
                   _ReservationsList(
                     reservations: upcoming,
                     emptyText: 'No upcoming reservations.',
+                    showCancel: true,
                   ),
                   _ReservationsList(
                     reservations: past,
@@ -68,10 +71,12 @@ class _ReservationsList extends StatelessWidget {
   final List<Reservation> reservations;
   final String emptyText;
   final bool faded;
+  final bool showCancel;
   const _ReservationsList({
     required this.reservations,
     required this.emptyText,
     this.faded = false,
+    this.showCancel = false,
   });
 
   @override
@@ -84,8 +89,11 @@ class _ReservationsList extends StatelessWidget {
       itemCount: reservations.length,
       separatorBuilder: (_, __) => const SizedBox(height: 14),
       itemBuilder:
-          (context, i) =>
-              _ReservationCard(reservation: reservations[i], faded: faded),
+          (context, i) => _ReservationCard(
+            reservation: reservations[i],
+            faded: faded,
+            showCancel: showCancel,
+          ),
     );
   }
 }
@@ -93,132 +101,252 @@ class _ReservationsList extends StatelessWidget {
 class _ReservationCard extends StatelessWidget {
   final Reservation reservation;
   final bool faded;
-  const _ReservationCard({required this.reservation, this.faded = false});
+  final bool showCancel;
+  const _ReservationCard({
+    required this.reservation,
+    this.faded = false,
+    this.showCancel = false,
+  });
+
+  void _onCancel(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Cancel Reservation'),
+            content: const Text(
+              'Are you sure you want to cancel this reservation?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Yes, Cancel'),
+              ),
+            ],
+          ),
+    );
+    if (confirmed == true) {
+      // TODO: Implement cancellation logic
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Reservation cancelled (mock).')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(18),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
       child: Stack(
         children: [
-          // Background image
-          SizedBox(
-            height: 120,
+          // Card shadow
+          Container(
+            height: 140,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.13),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+          ),
+          // Card content
+          ClipRRect(
+            borderRadius: BorderRadius.circular(24),
             child: Stack(
-              fit: StackFit.expand,
               children: [
-                Image.network(
-                  reservation.image,
-                  fit: BoxFit.cover,
-                  color: faded ? Colors.grey.withOpacity(0.5) : null,
-                  colorBlendMode: faded ? BlendMode.saturation : null,
-                  errorBuilder:
-                      (context, error, stackTrace) => Container(
-                        color: theme.primaryColor.withOpacity(0.08),
-                        child: Icon(
-                          Icons.directions_boat,
-                          color: theme.primaryColor,
-                          size: 40,
+                SizedBox(
+                  height: 140,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Background image
+                      Image.network(
+                        reservation.image,
+                        fit: BoxFit.cover,
+                        color: faded ? Colors.grey.withOpacity(0.5) : null,
+                        colorBlendMode: faded ? BlendMode.saturation : null,
+                        errorBuilder:
+                            (context, error, stackTrace) => Container(
+                              color: theme.primaryColor.withOpacity(0.08),
+                              child: Icon(
+                                Icons.directions_boat,
+                                color: theme.primaryColor,
+                                size: 40,
+                              ),
+                            ),
+                      ),
+                      // Glassmorphism overlay
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.black.withOpacity(0.18),
+                              Colors.black.withOpacity(0.10),
+                            ],
+                          ),
                         ),
                       ),
+                      // Accent bar
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          width: 8,
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                theme.primaryColor,
+                                theme.colorScheme.secondary,
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(24),
+                              bottomLeft: Radius.circular(24),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.18),
-                        Colors.black.withOpacity(0.45),
+                // Card content
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 18, 18, 18),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                reservation.yacht,
+                                style: theme.textTheme.titleLarge?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.place,
+                                    size: 17,
+                                    color: Colors.white70,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: Text(
+                                      reservation.location,
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            color: Colors.white70,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 7,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.13),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_today,
+                                      size: 15,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      reservation.date,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (showCancel) ...[
+                          const SizedBox(width: 10),
+                          // Floating cancel button
+                          Material(
+                            color: Colors.transparent,
+                            elevation: 6,
+                            shape: const CircleBorder(),
+                            child: InkWell(
+                              onTap: () => _onCancel(context),
+                              customBorder: const CircleBorder(),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.redAccent,
+                                      Colors.red.shade700,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(13),
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
                 ),
               ],
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          reservation.yacht,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            Icon(Icons.place, size: 15, color: Colors.white70),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                reservation.location,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.white70,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 7,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.13),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          size: 15,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          reservation.date,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         ],

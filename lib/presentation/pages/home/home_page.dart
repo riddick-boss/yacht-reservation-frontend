@@ -8,6 +8,8 @@ import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
 import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/home/cubit/home_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -43,8 +45,6 @@ class _HomeView extends StatelessWidget {
               SliverToBoxAdapter(child: PromotionsBanner()),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(child: YachtsMapSection()),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(child: WeatherWidget()),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(child: QuickActionsWidget()),
               SliverToBoxAdapter(child: SizedBox(height: 32)),
@@ -706,71 +706,126 @@ class PromoReservationSheet extends StatelessWidget {
   }
 }
 
-class YachtsMapSection extends StatelessWidget {
+class YachtsMapSection extends StatefulWidget {
   const YachtsMapSection({super.key});
 
   @override
+  State<YachtsMapSection> createState() => _YachtsMapSectionState();
+}
+
+class _YachtsMapSectionState extends State<YachtsMapSection> {
+  @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> yachts = [
+      {'name': 'Sunseeker Predator 60', 'location': LatLng(43.7384, 7.4246)},
+      {'name': 'Azimut Grande 27', 'location': LatLng(43.2965, 5.3698)},
+      {'name': 'Princess V55', 'location': LatLng(44.4268, 26.1025)},
+    ];
+    final points = yachts.map((y) => y['location'] as LatLng).toList();
+    // Calculate bounds
+    LatLngBounds bounds = LatLngBounds(points.first, points.first);
+    for (final p in points) {
+      bounds.extend(p);
+    }
+    final center = LatLng(
+      (bounds.north + bounds.south) / 2,
+      (bounds.east + bounds.west) / 2,
+    );
+    double initialZoom = 4.5;
+    if (points.length > 1) {
+      final latSpan = (bounds.north - bounds.south).abs();
+      final lngSpan = (bounds.east - bounds.west).abs();
+      if (latSpan < 2 && lngSpan < 2) {
+        initialZoom = 8.5;
+      } else if (latSpan < 5 && lngSpan < 5) {
+        initialZoom = 7.5;
+      } else if (latSpan < 10 && lngSpan < 10) {
+        initialZoom = 6.5;
+      } else if (latSpan < 20 && lngSpan < 20) {
+        initialZoom = 5.5;
+      }
+    }
     final theme = Theme.of(context);
-    // Placeholder for map
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
-        height: 180,
         decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.07),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          color: theme.primaryColor.withOpacity(0.1),
+          boxShadow: [
+            BoxShadow(
+              color: theme.primaryColor.withOpacity(0.10),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.map,
-                size: 48,
-                color: theme.primaryColor.withOpacity(0.5),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.map, size: 28, color: theme.primaryColor),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Yachts Map',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Yacht locations map coming soon!',
-                style: theme.textTheme.bodyMedium,
+              SizedBox(
+                height: 220,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  child: FlutterMap(
+                    options: MapOptions(
+                      initialCenter: center,
+                      initialZoom: initialZoom,
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName:
+                            'com.example.yacht_reservation_frontend',
+                      ),
+                      MarkerLayer(
+                        markers:
+                            yachts
+                                .map(
+                                  (yacht) => Marker(
+                                    width: 40,
+                                    height: 40,
+                                    point: yacht['location'] as LatLng,
+                                    child: Tooltip(
+                                      message: yacht['name'] as String,
+                                      child: const Icon(
+                                        Icons.directions_boat,
+                                        color: Colors.blueAccent,
+                                        size: 32,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class WeatherWidget extends StatelessWidget {
-  const WeatherWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    // Mock weather
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Icon(Icons.wb_sunny, color: Colors.orange, size: 36),
-            const SizedBox(width: 16),
-            Text(
-              '27°C, Sunny',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text('Monaco', style: theme.textTheme.bodyMedium),
-          ],
         ),
       ),
     );

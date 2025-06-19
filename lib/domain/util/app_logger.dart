@@ -14,4 +14,8 @@ class AppLogger {
   static void e(String message, {Object? error}) {
     logger.e(message, error: error);
   }
+
+  static void err(Object error) {
+    logger.e(error.toString());
+  }
 }

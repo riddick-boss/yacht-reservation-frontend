@@ -4,8 +4,7 @@ part of 'profile_cubit.dart';
 abstract class ProfileState with _$ProfileState {
   const factory ProfileState({
     final ProfileEffect? effect,
-    @Default('John Doe') String userName,
-    @Default('john.doe@email.com') String userEmail,
+    final Profile? profile,
   }) = _ProfileState;
 }
 

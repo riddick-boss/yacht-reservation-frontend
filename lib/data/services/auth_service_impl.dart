@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:yacht_reservation_frontend/data/datasource/auth/auth_local_datasource.dart';
 import 'package:yacht_reservation_frontend/data/datasource/auth/auth_remote_datasource.dart';
+import 'package:yacht_reservation_frontend/domain/models/profile.dart';
 import 'package:yacht_reservation_frontend/domain/services/auth_service.dart';
 import 'package:yacht_reservation_frontend/domain/util/app_logger.dart';
 
@@ -45,5 +46,17 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<void> logout() async {
     await _authLocalDatasource.deleteJwt();
+  }
+
+  @override
+  Future<Profile> getProfile() async {
+    final profileResponse = await _loginRemoteDatasource.getProfile();
+    return Profile(email: profileResponse.email, name: profileResponse.name);
+  }
+
+  @override
+  Future<Profile> updateProfile(String name) async {
+    final profileResponse = await _loginRemoteDatasource.updateProfile(name);
+    return Profile(email: profileResponse.email, name: profileResponse.name);
   }
 }

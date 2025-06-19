@@ -79,7 +79,7 @@ class _ProfileView extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                state.userName,
+                                state.profile?.name ?? '',
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _ProfileView extends StatelessWidget {
                                     () => _showChangeNameDialog(
                                       context,
                                       cubit,
-                                      state.userName,
+                                      state.profile?.name ?? '',
                                     ),
                                 child: Container(
                                   padding: const EdgeInsets.all(4),
@@ -116,7 +116,7 @@ class _ProfileView extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            state.userEmail,
+                            state.profile?.email ?? '',
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,

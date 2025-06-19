@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yacht_reservation_frontend/data/datasource/auth/dto/login_response.dart';
+import 'package:yacht_reservation_frontend/data/datasource/auth/dto/profile_response.dart';
 import 'package:yacht_reservation_frontend/data/datasource/auth/dto/register_response.dart';
 import 'package:yacht_reservation_frontend/domain/util/app_logger.dart';
 
@@ -39,5 +40,17 @@ class AuthRemoteDatasource {
     );
     AppLogger.i('register response: $response');
     return RegisterResponse.fromJson(response.data);
+  }
+
+  Future<ProfileResponse> getProfile() async {
+    final response = await dio.get('/profile');
+    AppLogger.i('get profile response: $response');
+    return ProfileResponse.fromJson(response.data['profile']);
+  }
+
+  Future<ProfileResponse> updateProfile(String name) async {
+    final response = await dio.post('/profile', data: {'name': name});
+    AppLogger.i('update profile response: $response');
+    return ProfileResponse.fromJson(response.data['profile']);
   }
 }

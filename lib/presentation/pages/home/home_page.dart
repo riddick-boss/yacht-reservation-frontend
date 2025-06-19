@@ -121,7 +121,7 @@ class UpcomingReservationsSection extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 100,
+            height: 120,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: reservations.length,

@@ -12,14 +12,14 @@ part 'home_cubit.freezed.dart';
 class HomeCubit extends Cubit<HomeState> {
   final YachtsService _yachtsService;
 
-  HomeCubit(this._yachtsService) : super(HomeState()) {
+  HomeCubit(this._yachtsService) : super(const HomeState()) {
     getYachts();
   }
 
   Future<void> getYachts() async {
     emit(state.copyWith(isLoading: true));
     try {
-      final yachts = await _yachtsService.getYachts();
+      final yachts = await _yachtsService.getFeaturedYachts();
       emit(state.copyWith(isLoading: false, yachts: yachts));
     } catch (e) {
       AppLogger.d('error: $e');

@@ -8,9 +8,10 @@ abstract class Yacht with _$Yacht {
     required int id,
     required String name,
     required String manufacturer,
-    required int length,
+    required double length,
     required int crewNum,
     required int price,
+    required String imageUrl,
     required bool isAvailable,
   }) = _Yacht;
 }

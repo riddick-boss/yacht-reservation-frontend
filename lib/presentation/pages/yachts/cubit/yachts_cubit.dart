@@ -12,10 +12,10 @@ class YachtsCubit extends Cubit<YachtsState> {
   final YachtsService _yachtsService;
 
   YachtsCubit(this._yachtsService) : super(const YachtsState.loading()) {
-    getYachts();
+    _getYachts();
   }
 
-  Future<void> getYachts() async {
+  Future<void> _getYachts() async {
     emit(const YachtsState.loading());
     try {
       final yachts = await _yachtsService.getYachts();

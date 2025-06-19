@@ -9,10 +9,11 @@ abstract class YachtResponse with _$YachtResponse {
     required int id,
     required String name,
     required String manufacturer,
-    required int length,
+    required double length,
     required int crewNum,
-    required int price,
-    @Default(true) bool isAvailable,
+    required int pricePerDay,
+    required String imageUrl,
+    required bool isAvailable,
   }) = _YachtResponse;
 
   factory YachtResponse.fromJson(Map<String, dynamic> json) =>

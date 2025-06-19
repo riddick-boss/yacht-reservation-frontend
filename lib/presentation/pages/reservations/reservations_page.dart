@@ -195,8 +195,8 @@ class _BookingCard extends StatelessWidget {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Colors.black.withOpacity(0.18),
-                              Colors.black.withOpacity(0.10),
+                              Colors.black.withOpacity(0.4),
+                              Colors.black.withOpacity(0.2),
                             ],
                           ),
                         ),
@@ -259,7 +259,7 @@ class _BookingCard extends StatelessWidget {
                                   Icon(
                                     Icons.place,
                                     size: 17,
-                                    color: Colors.white70,
+                                    color: Colors.white,
                                   ),
                                   const SizedBox(width: 5),
                                   Expanded(
@@ -267,8 +267,15 @@ class _BookingCard extends StatelessWidget {
                                       booking.locationName,
                                       style: theme.textTheme.bodyMedium
                                           ?.copyWith(
-                                            color: Colors.white70,
-                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            shadows: [
+                                              Shadow(
+                                                color: Colors.black.withOpacity(0.5),
+                                                blurRadius: 3,
+                                                offset: const Offset(0, 1),
+                                              ),
+                                            ],
                                           ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -283,8 +290,12 @@ class _BookingCard extends StatelessWidget {
                                   vertical: 7,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.13),
+                                  color: Colors.black.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.2),
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -297,9 +308,16 @@ class _BookingCard extends StatelessWidget {
                                     const SizedBox(width: 5),
                                     Text(
                                       booking.day,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,
+                                        shadows: [
+                                          Shadow(
+                                            color: Colors.black.withOpacity(0.5),
+                                            blurRadius: 2,
+                                            offset: const Offset(0, 1),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

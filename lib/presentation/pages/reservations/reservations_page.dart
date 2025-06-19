@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
-import 'package:yacht_reservation_frontend/domain/models/reservation.dart';
+import 'package:yacht_reservation_frontend/domain/models/booking.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/reservations/cubit/reservations_cubit.dart';
 
 class ReservationsPage extends StatelessWidget {
@@ -48,13 +48,13 @@ class _ReservationsView extends StatelessWidget {
               Error(:final message) => Center(child: Text('Error: $message')),
               Loaded(:final upcoming, :final past) => TabBarView(
                 children: [
-                  _ReservationsList(
-                    reservations: upcoming,
+                  _BookingsList(
+                    bookings: upcoming,
                     emptyText: 'No upcoming reservations.',
                     showCancel: true,
                   ),
-                  _ReservationsList(
-                    reservations: past,
+                  _BookingsList(
+                    bookings: past,
                     emptyText: 'No past reservations.',
                     faded: true,
                   ),
@@ -68,13 +68,13 @@ class _ReservationsView extends StatelessWidget {
   }
 }
 
-class _ReservationsList extends StatelessWidget {
-  final List<Reservation> reservations;
+class _BookingsList extends StatelessWidget {
+  final List<Booking> bookings;
   final String emptyText;
   final bool faded;
   final bool showCancel;
-  const _ReservationsList({
-    required this.reservations,
+  const _BookingsList({
+    required this.bookings,
     required this.emptyText,
     this.faded = false,
     this.showCancel = false,
@@ -82,16 +82,16 @@ class _ReservationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (reservations.isEmpty) {
+    if (bookings.isEmpty) {
       return Center(child: Text(emptyText));
     }
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-      itemCount: reservations.length,
+      itemCount: bookings.length,
       separatorBuilder: (_, _) => const SizedBox(height: 14),
       itemBuilder:
-          (context, i) => _ReservationCard(
-            reservation: reservations[i],
+          (context, i) => _BookingCard(
+            booking: bookings[i],
             faded: faded,
             showCancel: showCancel,
           ),
@@ -99,12 +99,12 @@ class _ReservationsList extends StatelessWidget {
   }
 }
 
-class _ReservationCard extends StatelessWidget {
-  final Reservation reservation;
+class _BookingCard extends StatelessWidget {
+  final Booking booking;
   final bool faded;
   final bool showCancel;
-  const _ReservationCard({
-    required this.reservation,
+  const _BookingCard({
+    required this.booking,
     this.faded = false,
     this.showCancel = false,
   });
@@ -175,7 +175,7 @@ class _ReservationCard extends StatelessWidget {
                     children: [
                       // Background image
                       Image.network(
-                        reservation.image,
+                        booking.locationImageUrl,
                         fit: BoxFit.cover,
                         color: faded ? Colors.grey.withOpacity(0.5) : null,
                         colorBlendMode: faded ? BlendMode.saturation : null,
@@ -239,7 +239,7 @@ class _ReservationCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                reservation.yacht,
+                                booking.yachtName,
                                 style: theme.textTheme.titleLarge?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -264,7 +264,7 @@ class _ReservationCard extends StatelessWidget {
                                   const SizedBox(width: 5),
                                   Expanded(
                                     child: Text(
-                                      reservation.location,
+                                      booking.locationName,
                                       style: theme.textTheme.bodyMedium
                                           ?.copyWith(
                                             color: Colors.white70,
@@ -296,7 +296,7 @@ class _ReservationCard extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
-                                      reservation.date,
+                                      booking.day,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,

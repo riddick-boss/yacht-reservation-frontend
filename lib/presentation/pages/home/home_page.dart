@@ -134,7 +134,6 @@ class _ReservationsHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextButton(onPressed: () {}, child: const Text('See all')),
         ],
       ),
     );

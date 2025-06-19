@@ -188,7 +188,6 @@ class _ReservationCard extends StatelessWidget {
                               ),
                             ),
                       ),
-                      // Glassmorphism overlay
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(

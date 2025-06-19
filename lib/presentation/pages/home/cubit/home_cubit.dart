@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:yacht_reservation_frontend/domain/services/auth_service.dart';
 import 'package:yacht_reservation_frontend/domain/models/booking.dart';
 import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
 import 'package:yacht_reservation_frontend/domain/services/bookings_service.dart';
@@ -14,11 +15,13 @@ part 'home_cubit.freezed.dart';
 class HomeCubit extends Cubit<HomeState> {
   final YachtsService _yachtsService;
   final BookingsService _bookingsService;
+  final AuthService _authService;
 
-  HomeCubit(this._yachtsService, this._bookingsService)
+  HomeCubit(this._yachtsService, this._bookingsService, this._authService)
     : super(const HomeState()) {
     getYachts();
     getUpcomingBookings();
+    getUserName();
   }
 
   Future<void> getYachts() async {
@@ -47,5 +50,10 @@ class HomeCubit extends Cubit<HomeState> {
       AppLogger.d('error: $e');
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  Future<void> getUserName() async {
+    final profile = await _authService.getProfile();
+    emit(state.copyWith(userName: profile.name ?? ''));
   }
 }

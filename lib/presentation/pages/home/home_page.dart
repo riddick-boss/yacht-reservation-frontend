@@ -35,7 +35,7 @@ class _HomeView extends StatelessWidget {
         return Scaffold(
           body: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(child: HomeHeader()),
+              SliverToBoxAdapter(child: HomeHeader(userName: state.userName)),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(
                 child: UpcomingReservationsSection(
@@ -62,13 +62,12 @@ class _HomeView extends StatelessWidget {
 }
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+  final String userName;
+  const HomeHeader({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Mock user name
-    final userName = 'Captain Jack';
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
       child: Row(
@@ -85,7 +84,7 @@ class HomeHeader extends StatelessWidget {
               children: [
                 Text('Good day,', style: theme.textTheme.titleMedium),
                 Text(
-                  userName,
+                  'Captain $userName',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

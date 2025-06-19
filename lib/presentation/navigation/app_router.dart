@@ -3,6 +3,7 @@ import 'package:yacht_reservation_frontend/presentation/pages/home/home_page.dar
 import 'package:yacht_reservation_frontend/presentation/pages/login/login_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/main_nav_host/main_nav_host.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/splash/splash_page.dart';
+import 'package:yacht_reservation_frontend/presentation/pages/yachts/yachts_page.dart';
 import 'package:yacht_reservation_frontend/presentation/widget/placeholder_page.dart';
 
 final router = GoRouter(
@@ -23,6 +24,10 @@ final router = GoRouter(
             GoRoute(
               path: Routes.home,
               builder: (context, state) => const HomePage(),
+            ),
+            GoRoute(
+              path: Routes.yachts,
+              builder: (context, state) => const YachtsPage(),
             ),
           ],
         ),
@@ -57,4 +62,5 @@ class Routes {
   static const String home = '/home';
   static const String reservations = '/reservations';
   static const String profile = '/profile';
+  static const String yachts = '/yachts';
 }

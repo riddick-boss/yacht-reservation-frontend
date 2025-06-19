@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
+import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/home/cubit/home_cubit.dart';
 
 class HomePage extends StatelessWidget {
@@ -200,7 +202,12 @@ class BriefYachtListSection extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextButton(onPressed: () {}, child: const Text('See all')),
+              TextButton(
+                onPressed: () {
+                  context.push(Routes.yachts);
+                },
+                child: const Text('See all'),
+              ),
             ],
           ),
           ...briefYachts.map(

@@ -7,5 +7,4 @@ sealed class ReservationsState with _$ReservationsState {
     required List<Booking> upcoming,
     required List<Booking> past,
   }) = Loaded;
-  const factory ReservationsState.error(String message) = Error;
 }

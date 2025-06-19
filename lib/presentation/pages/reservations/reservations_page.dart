@@ -43,20 +43,22 @@ class _ReservationsView extends StatelessWidget {
         ),
         body: BlocBuilder<ReservationsCubit, ReservationsState>(
           builder: (context, state) {
+            final cubit = context.read<ReservationsCubit>();
             return switch (state) {
               Loading() => const Center(child: CircularProgressIndicator()),
-              Error(:final message) => Center(child: Text('Error: $message')),
               Loaded(:final upcoming, :final past) => TabBarView(
                 children: [
                   _BookingsList(
                     bookings: upcoming,
                     emptyText: 'No upcoming reservations.',
                     showCancel: true,
+                    onCancel: (booking) => cubit.cancelBooking(booking),
                   ),
                   _BookingsList(
                     bookings: past,
                     emptyText: 'No past reservations.',
                     faded: true,
+                    onCancel: (booking) => cubit.cancelBooking(booking),
                   ),
                 ],
               ),
@@ -73,11 +75,13 @@ class _BookingsList extends StatelessWidget {
   final String emptyText;
   final bool faded;
   final bool showCancel;
+  final Function(Booking) onCancel;
   const _BookingsList({
     required this.bookings,
     required this.emptyText,
     this.faded = false,
     this.showCancel = false,
+    required this.onCancel,
   });
 
   @override
@@ -94,6 +98,7 @@ class _BookingsList extends StatelessWidget {
             booking: bookings[i],
             faded: faded,
             showCancel: showCancel,
+            onCancel: onCancel,
           ),
     );
   }
@@ -103,14 +108,16 @@ class _BookingCard extends StatelessWidget {
   final Booking booking;
   final bool faded;
   final bool showCancel;
+  final Function(Booking) onCancel;
   const _BookingCard({
     required this.booking,
     this.faded = false,
     this.showCancel = false,
+    required this.onCancel,
   });
 
-  void _onCancel(BuildContext context) async {
-    final confirmed = await showDialog<bool>(
+  void _onCancel(BuildContext context) {
+    showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
@@ -120,7 +127,7 @@ class _BookingCard extends StatelessWidget {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('No'),
               ),
               ElevatedButton(
@@ -128,18 +135,15 @@ class _BookingCard extends StatelessWidget {
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () {
+                  onCancel(booking);
+                  Navigator.of(context).pop();
+                },
                 child: const Text('Yes, Cancel'),
               ),
             ],
           ),
     );
-    if (confirmed == true) {
-      // TODO: Implement cancellation logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Reservation cancelled (mock).')),
-      );
-    }
   }
 
   @override
@@ -271,7 +275,9 @@ class _BookingCard extends StatelessWidget {
                                             fontWeight: FontWeight.w500,
                                             shadows: [
                                               Shadow(
-                                                color: Colors.black.withOpacity(0.5),
+                                                color: Colors.black.withOpacity(
+                                                  0.5,
+                                                ),
                                                 blurRadius: 3,
                                                 offset: const Offset(0, 1),
                                               ),
@@ -313,7 +319,9 @@ class _BookingCard extends StatelessWidget {
                                         fontWeight: FontWeight.w600,
                                         shadows: [
                                           Shadow(
-                                            color: Colors.black.withOpacity(0.5),
+                                            color: Colors.black.withOpacity(
+                                              0.5,
+                                            ),
                                             blurRadius: 2,
                                             offset: const Offset(0, 1),
                                           ),

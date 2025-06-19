@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yacht_reservation_frontend/domain/models/booking.dart';
 import 'package:yacht_reservation_frontend/domain/services/bookings_service.dart';
+import 'package:yacht_reservation_frontend/domain/util/app_logger.dart';
 
 part 'reservations_state.dart';
 part 'reservations_cubit.freezed.dart';
@@ -27,7 +28,16 @@ class ReservationsCubit extends Cubit<ReservationsState> {
 
       emit(ReservationsState.loaded(upcoming: upcoming, past: past));
     } catch (e) {
-      emit(ReservationsState.error(e.toString()));
+      AppLogger.err(e);
+    }
+  }
+
+  Future<void> cancelBooking(Booking booking) async {
+    try {
+      await _bookingsService.cancel(booking.id);
+      loadReservations();
+    } catch (e) {
+      AppLogger.err(e);
     }
   }
 }

@@ -1,10 +1,11 @@
-import 'dart:ui';
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/domain/models/reservation.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/reservations/cubit/reservations_cubit.dart';
-import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 
 class ReservationsPage extends StatelessWidget {
   const ReservationsPage({super.key});
@@ -87,7 +88,7 @@ class _ReservationsList extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       itemCount: reservations.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 14),
+      separatorBuilder: (_, _) => const SizedBox(height: 14),
       itemBuilder:
           (context, i) => _ReservationCard(
             reservation: reservations[i],

@@ -16,4 +16,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     await _authService.logout();
     emit(state.copyWith(effect: const ProfileEffect.logout()));
   }
+
+  void updateUserName(String newName) {
+    emit(state.copyWith(userName: newName));
+  }
 }

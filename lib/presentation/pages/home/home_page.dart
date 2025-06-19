@@ -78,7 +78,7 @@ class HomeHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Good morning,', style: theme.textTheme.titleMedium),
+                Text('Good day,', style: theme.textTheme.titleMedium),
                 Text(
                   userName,
                   style: theme.textTheme.headlineSmall?.copyWith(
@@ -533,7 +533,7 @@ class PromotionsBanner extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Book now and get 20% off on all yachts.',
+                    'Book now and get 20% off on our yachts.',
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],

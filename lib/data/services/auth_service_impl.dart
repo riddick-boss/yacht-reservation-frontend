@@ -41,4 +41,9 @@ class AuthServiceImpl implements AuthService {
     );
     _authLocalDatasource.saveJwt(registerResponse.jwtToken);
   }
+
+  @override
+  Future<void> logout() async {
+    await _authLocalDatasource.deleteJwt();
+  }
 }

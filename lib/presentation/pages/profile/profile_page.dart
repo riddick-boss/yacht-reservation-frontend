@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:yacht_reservation_frontend/domain/di/injection.dart';
+import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'cubit/profile_cubit.dart';
 import 'dart:ui';
 
@@ -11,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ProfileCubit(),
+      create: (_) => getIt<ProfileCubit>(),
       child: const _ProfileView(),
     );
   }
@@ -22,14 +25,22 @@ class _ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ProfileCubit>();
     final theme = Theme.of(context);
-    // Mock user data
     const userName = 'John Doe';
     const userEmail = 'john.doe@email.com';
-    // New, beautiful sailing photo
     const bgImage =
         'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=900&q=80';
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocConsumer<ProfileCubit, ProfileState>(
+      listenWhen: (previous, current) => previous.effect != current.effect,
+      listener: (context, state) {
+        switch (state.effect) {
+          case ProfileLogout():
+            context.go(Routes.login);
+          case null:
+            break;
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
@@ -98,7 +109,9 @@ class _ProfileView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 48),
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          cubit.logout();
+                        },
                         icon: const Icon(Icons.logout),
                         label: const Text('Log Out'),
                         style: ElevatedButton.styleFrom(

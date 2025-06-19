@@ -2,10 +2,10 @@ import 'package:go_router/go_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/home/home_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/login/login_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/main_nav_host/main_nav_host.dart';
+import 'package:yacht_reservation_frontend/presentation/pages/profile/profile_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/reservations/reservations_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/splash/splash_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/yachts/yachts_page.dart';
-import 'package:yacht_reservation_frontend/presentation/widget/placeholder_page.dart';
 
 final router = GoRouter(
   initialLocation: Routes.splash,
@@ -44,8 +44,7 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: Routes.profile,
-              builder:
-                  (context, state) => const PlaceholderPage(title: 'Profile'),
+              builder: (context, state) => const ProfilePage(),
             ),
           ],
         ),

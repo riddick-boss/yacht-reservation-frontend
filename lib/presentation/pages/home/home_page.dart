@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
+import 'package:yacht_reservation_frontend/domain/models/booking.dart';
 import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
 import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/home/cubit/home_cubit.dart';
@@ -36,7 +37,11 @@ class _HomeView extends StatelessWidget {
             slivers: [
               SliverToBoxAdapter(child: HomeHeader()),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(child: UpcomingReservationsSection()),
+              SliverToBoxAdapter(
+                child: UpcomingReservationsSection(
+                  upcomingBookings: state.upcomingBookings,
+                ),
+              ),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(
                 child: FeaturedYachtsSection(yachts: state.yachts),
@@ -95,23 +100,21 @@ class HomeHeader extends StatelessWidget {
 }
 
 class UpcomingReservationsSection extends StatelessWidget {
-  const UpcomingReservationsSection({super.key});
+  final List<Booking> upcomingBookings;
+  const UpcomingReservationsSection({
+    super.key,
+    required this.upcomingBookings,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Mock data
-    final reservations = [
-      {'yacht': 'Sea Breeze', 'date': '2024-07-10', 'location': 'Monaco'},
-      {'yacht': 'Ocean Pearl', 'date': '2024-08-02', 'location': 'Ibiza'},
-      {'yacht': 'Ocean Pearl', 'date': '2024-08-02', 'location': 'Ibiza'},
-    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _ReservationsHeader(),
-        reservations.isEmpty
+        upcomingBookings.isEmpty
             ? const _NoReservationsView()
-            : _ReservationsListView(reservations: reservations),
+            : _ReservationsListView(bookings: upcomingBookings),
       ],
     );
   }
@@ -157,8 +160,8 @@ class _NoReservationsView extends StatelessWidget {
 }
 
 class _ReservationsListView extends StatelessWidget {
-  final List<Map<String, String>> reservations;
-  const _ReservationsListView({required this.reservations});
+  final List<Booking> bookings;
+  const _ReservationsListView({required this.bookings});
 
   @override
   Widget build(BuildContext context) {
@@ -167,14 +170,14 @@ class _ReservationsListView extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-        itemCount: reservations.length,
+        itemCount: bookings.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final res = reservations[index];
+          final booking = bookings[index];
           return _ReservationCard(
-            yacht: res['yacht']!,
-            location: res['location']!,
-            date: res['date']!,
+            yacht: booking.yachtName,
+            location: booking.locationName,
+            date: booking.day,
           );
         },
       ),

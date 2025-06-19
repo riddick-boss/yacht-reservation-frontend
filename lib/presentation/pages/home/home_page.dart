@@ -39,7 +39,7 @@ class _HomeView extends StatelessWidget {
               SliverToBoxAdapter(child: UpcomingReservationsSection()),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(
-                child: BriefYachtListSection(yachts: state.yachts),
+                child: FeaturedYachtsSection(yachts: state.yachts),
               ),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(child: PromotionsBanner()),
@@ -301,14 +301,13 @@ class _ReservationCard extends StatelessWidget {
   }
 }
 
-class BriefYachtListSection extends StatelessWidget {
+class FeaturedYachtsSection extends StatelessWidget {
   final List<Yacht> yachts;
-  const BriefYachtListSection({super.key, required this.yachts});
+  const FeaturedYachtsSection({super.key, required this.yachts});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final briefYachts = yachts.take(3).toList();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -331,13 +330,13 @@ class BriefYachtListSection extends StatelessWidget {
               ),
             ],
           ),
-          ...briefYachts.map(
+          ...yachts.map(
             (yacht) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: YachtBriefCard(yacht: yacht),
             ),
           ),
-          if (briefYachts.isEmpty)
+          if (yachts.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
@@ -372,7 +371,7 @@ class YachtBriefCard extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 Image.network(
-                  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+                  yacht.imageUrl,
                   fit: BoxFit.cover,
                   errorBuilder:
                       (context, error, stackTrace) => Container(
@@ -483,7 +482,7 @@ class YachtBriefCard extends StatelessWidget {
                       ],
                     ),
                     child: Text(
-                      '\$24${yacht.price}/day',
+                      '\$${yacht.price}/day',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

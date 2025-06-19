@@ -36,6 +36,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(isLoading: true));
     try {
       final bookings = await _bookingsService.getUpcomingBookings();
+      bookings.sort((a, b) => a.day.compareTo(b.day));
       emit(
         state.copyWith(
           isLoading: false,

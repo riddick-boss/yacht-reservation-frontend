@@ -20,7 +20,11 @@ class ReservationsCubit extends Cubit<ReservationsState> {
     emit(const ReservationsState.loading());
     try {
       final upcoming = await _bookingsService.getUpcomingBookings();
+      upcoming.sort((a, b) => a.day.compareTo(b.day));
+
       final past = await _bookingsService.getPastBookings();
+      past.sort((a, b) => b.day.compareTo(a.day));
+
       emit(ReservationsState.loaded(upcoming: upcoming, past: past));
     } catch (e) {
       emit(ReservationsState.error(e.toString()));

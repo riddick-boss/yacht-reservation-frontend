@@ -88,7 +88,6 @@ class HomeHeader extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.notifications_none, color: theme.primaryColor, size: 28),
         ],
       ),
     );

@@ -756,18 +756,18 @@ class _YachtsMapSectionState extends State<YachtsMapSection> {
       (bounds.north + bounds.south) / 2,
       (bounds.east + bounds.west) / 2,
     );
-    double initialZoom = 4.5;
+    double initialZoom = 4;
     if (points.length > 1) {
       final latSpan = (bounds.north - bounds.south).abs();
       final lngSpan = (bounds.east - bounds.west).abs();
       if (latSpan < 2 && lngSpan < 2) {
-        initialZoom = 8.5;
+        initialZoom = 7;
       } else if (latSpan < 5 && lngSpan < 5) {
-        initialZoom = 7.5;
-      } else if (latSpan < 10 && lngSpan < 10) {
         initialZoom = 6.5;
+      } else if (latSpan < 10 && lngSpan < 10) {
+        initialZoom = 5;
       } else if (latSpan < 20 && lngSpan < 20) {
-        initialZoom = 5.5;
+        initialZoom = 4.5;
       }
     }
     final theme = Theme.of(context);
@@ -836,7 +836,7 @@ class _YachtsMapSectionState extends State<YachtsMapSection> {
                                     child: Tooltip(
                                       message: yacht['name'] as String,
                                       child: const Icon(
-                                        Icons.directions_boat,
+                                        Icons.sailing,
                                         color: Colors.blueAccent,
                                         size: 32,
                                       ),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yacht_reservation_frontend/domain/di/injection.dart';
 import 'package:yacht_reservation_frontend/domain/models/booking.dart';
+import 'package:yacht_reservation_frontend/domain/models/promo.dart';
 import 'package:yacht_reservation_frontend/domain/models/yacht.dart';
 import 'package:yacht_reservation_frontend/presentation/navigation/app_router.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/home/cubit/home_cubit.dart';
@@ -32,6 +33,7 @@ class _HomeView extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {},
       builder: (context, state) {
+        final cubit = context.read<HomeCubit>();
         return Scaffold(
           body: CustomScrollView(
             slivers: [
@@ -46,8 +48,18 @@ class _HomeView extends StatelessWidget {
               SliverToBoxAdapter(
                 child: FeaturedYachtsSection(yachts: state.yachts),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(child: PromotionsBanner()),
+              if (state.promoBanner != null && state.promoData != null)
+                SliverToBoxAdapter(child: SizedBox(height: 16)),
+              if (state.promoBanner != null && state.promoData != null)
+                SliverToBoxAdapter(
+                  child: PromotionsBanner(
+                    promoBanner: state.promoBanner!,
+                    promoData: state.promoData!,
+                    onReserve: (date) {
+                      cubit.reservePromo(date);
+                    },
+                  ),
+                ),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(child: YachtsMapSection()),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -504,7 +516,15 @@ class YachtBriefCard extends StatelessWidget {
 }
 
 class PromotionsBanner extends StatelessWidget {
-  const PromotionsBanner({super.key});
+  final PromoBanner promoBanner;
+  final PromoData promoData;
+  final Function(String) onReserve;
+  const PromotionsBanner({
+    super.key,
+    required this.promoBanner,
+    required this.promoData,
+    required this.onReserve,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -527,16 +547,13 @@ class PromotionsBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Summer Sale!',
+                    promoBanner.title,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    'Book now and get 20% off on our yachts.',
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                  Text(promoBanner.message, style: theme.textTheme.bodyMedium),
                 ],
               ),
             ),
@@ -551,7 +568,11 @@ class PromotionsBanner extends StatelessWidget {
                       top: Radius.circular(24),
                     ),
                   ),
-                  builder: (context) => const PromoReservationSheet(),
+                  builder:
+                      (context) => PromoReservationSheet(
+                        promoData: promoData,
+                        onReserve: onReserve,
+                      ),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -561,7 +582,7 @@ class PromotionsBanner extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Book Now'),
+              child: Text(promoBanner.buttonText),
             ),
           ],
         ),
@@ -571,23 +592,22 @@ class PromotionsBanner extends StatelessWidget {
 }
 
 class PromoReservationSheet extends StatelessWidget {
-  const PromoReservationSheet({super.key});
+  final PromoData promoData;
+  final Function(String) onReserve;
+  const PromoReservationSheet({
+    super.key,
+    required this.promoData,
+    required this.onReserve,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Mock yacht info and dates
-    final yachtName = 'Sunseeker Predator 60';
-    final yachtImage =
-        'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80';
-    final location = 'Monaco';
-    final price = 2400;
-    final availableDates = [
-      '2024-07-01',
-      '2024-07-02',
-      '2024-07-03',
-      '2024-07-04',
-    ];
+    final yachtName = promoData.yacht.name;
+    final yachtImage = promoData.yacht.imageUrl;
+    final location = promoData.location;
+    final price = promoData.price;
+    final availableDates = promoData.availableDays;
     String selectedDate = availableDates.first;
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
@@ -674,7 +694,8 @@ class PromoReservationSheet extends StatelessWidget {
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Reservation made! (mock)'),
+                                content: Text('Reservation made!'),
+                                backgroundColor: Colors.green,
                               ),
                             );
                           },

@@ -79,4 +79,14 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> reservePromo(String date) async {
     await _bookingsService.book(state.promoData!.yacht.id, date);
   }
+
+  Future<void> refresh() async {
+    await Future.wait([
+      getYachts(),
+      getUpcomingBookings(),
+      getUserName(),
+      getPromoBanner(),
+      getPromoData(),
+    ]);
+  }
 }

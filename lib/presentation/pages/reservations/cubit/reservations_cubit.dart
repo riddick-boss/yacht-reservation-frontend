@@ -40,4 +40,8 @@ class ReservationsCubit extends Cubit<ReservationsState> {
       AppLogger.err(e);
     }
   }
+
+  Future<void> refresh() async {
+    await loadReservations();
+  }
 }

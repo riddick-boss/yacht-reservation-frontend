@@ -35,37 +35,40 @@ class _HomeView extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<HomeCubit>();
         return Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(child: HomeHeader(userName: state.userName)),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(
-                child: UpcomingReservationsSection(
-                  upcomingBookings: state.upcomingBookings,
-                ),
-              ),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(
-                child: FeaturedYachtsSection(yachts: state.yachts),
-              ),
-              if (state.promoBanner != null && state.promoData != null)
+          body: RefreshIndicator(
+            onRefresh: () => cubit.refresh(),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: HomeHeader(userName: state.userName)),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
-              if (state.promoBanner != null && state.promoData != null)
                 SliverToBoxAdapter(
-                  child: PromotionsBanner(
-                    promoBanner: state.promoBanner!,
-                    promoData: state.promoData!,
-                    onReserve: (date) {
-                      cubit.reservePromo(date);
-                    },
+                  child: UpcomingReservationsSection(
+                    upcomingBookings: state.upcomingBookings,
                   ),
                 ),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(child: YachtsMapSection()),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(child: QuickActionsWidget()),
-              SliverToBoxAdapter(child: SizedBox(height: 32)),
-            ],
+                SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(
+                  child: FeaturedYachtsSection(yachts: state.yachts),
+                ),
+                if (state.promoBanner != null && state.promoData != null)
+                  SliverToBoxAdapter(child: SizedBox(height: 16)),
+                if (state.promoBanner != null && state.promoData != null)
+                  SliverToBoxAdapter(
+                    child: PromotionsBanner(
+                      promoBanner: state.promoBanner!,
+                      promoData: state.promoData!,
+                      onReserve: (date) {
+                        cubit.reservePromo(date);
+                      },
+                    ),
+                  ),
+                SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: YachtsMapSection()),
+                SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: QuickActionsWidget()),
+                SliverToBoxAdapter(child: SizedBox(height: 32)),
+              ],
+            ),
           ),
         );
       },

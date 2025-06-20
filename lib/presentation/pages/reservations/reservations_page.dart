@@ -48,17 +48,23 @@ class _ReservationsView extends StatelessWidget {
               Loading() => const Center(child: CircularProgressIndicator()),
               Loaded(:final upcoming, :final past) => TabBarView(
                 children: [
-                  _BookingsList(
-                    bookings: upcoming,
-                    emptyText: 'No upcoming reservations.',
-                    showCancel: true,
-                    onCancel: (booking) => cubit.cancelBooking(booking),
+                  RefreshIndicator(
+                    onRefresh: () => cubit.refresh(),
+                    child: _BookingsList(
+                      bookings: upcoming,
+                      emptyText: 'No upcoming reservations.',
+                      showCancel: true,
+                      onCancel: (booking) => cubit.cancelBooking(booking),
+                    ),
                   ),
-                  _BookingsList(
-                    bookings: past,
-                    emptyText: 'No past reservations.',
-                    faded: true,
-                    onCancel: (booking) => cubit.cancelBooking(booking),
+                  RefreshIndicator(
+                    onRefresh: () => cubit.refresh(),
+                    child: _BookingsList(
+                      bookings: past,
+                      emptyText: 'No past reservations.',
+                      faded: true,
+                      onCancel: (booking) => cubit.cancelBooking(booking),
+                    ),
                   ),
                 ],
               ),
@@ -87,7 +93,15 @@ class _BookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (bookings.isEmpty) {
-      return Center(child: Text(emptyText));
+      return SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            child: Center(child: Text(emptyText)),
+          ),
+        ),
+      );
     }
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),

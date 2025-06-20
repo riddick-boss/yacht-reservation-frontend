@@ -879,7 +879,9 @@ class QuickActionsWidget extends StatelessWidget {
           _QuickActionButton(
             icon: Icons.support_agent,
             label: 'Support',
-            onTap: () {},
+            onTap: () {
+              context.push(Routes.support);
+            },
             color: Colors.green,
           ),
           _QuickActionButton(

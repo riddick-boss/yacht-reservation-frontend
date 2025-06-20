@@ -5,6 +5,7 @@ import 'package:yacht_reservation_frontend/presentation/pages/main_nav_host/main
 import 'package:yacht_reservation_frontend/presentation/pages/profile/profile_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/reservations/reservations_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/splash/splash_page.dart';
+import 'package:yacht_reservation_frontend/presentation/pages/support/support_page.dart';
 import 'package:yacht_reservation_frontend/presentation/pages/yachts/yachts_page.dart';
 
 final router = GoRouter(
@@ -15,6 +16,10 @@ final router = GoRouter(
       builder: (context, state) => const SplashPage(),
     ),
     GoRoute(path: Routes.login, builder: (context, state) => const LoginPage()),
+    GoRoute(
+      path: Routes.support,
+      builder: (context, state) => const SupportPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return MainNavHost(navigationShell: navigationShell);
@@ -61,4 +66,5 @@ class Routes {
   static const String reservations = '/reservations';
   static const String profile = '/profile';
   static const String yachts = '/yachts';
+  static const String support = '/support';
 }

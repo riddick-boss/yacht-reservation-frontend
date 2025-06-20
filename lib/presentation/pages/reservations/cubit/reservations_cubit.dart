@@ -29,6 +29,7 @@ class ReservationsCubit extends Cubit<ReservationsState> {
       emit(ReservationsState.loaded(upcoming: upcoming, past: past));
     } catch (e) {
       AppLogger.err(e);
+      emit(const ReservationsState.loaded(upcoming: [], past: []));
     }
   }
 

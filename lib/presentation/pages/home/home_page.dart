@@ -694,6 +694,7 @@ class PromoReservationSheet extends StatelessWidget {
                         const Spacer(),
                         ElevatedButton.icon(
                           onPressed: () {
+                            onReserve(selectedDate);
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

@@ -26,11 +26,7 @@ class HomeCubit extends Cubit<HomeState> {
     this._authService,
     this._promoService,
   ) : super(const HomeState()) {
-    getYachts();
-    getUpcomingBookings();
-    getUserName();
-    getPromoBanner();
-    getPromoData();
+    refresh();
   }
 
   Future<void> getYachts() async {
@@ -38,6 +34,17 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final yachts = await _yachtsService.getFeaturedYachts();
       emit(state.copyWith(isLoading: false, yachts: yachts));
+    } catch (e) {
+      AppLogger.d('error: $e');
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  Future<void> getYachtsLocations() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final yachtsLocations = await _yachtsService.getYachtsLocations();
+      emit(state.copyWith(isLoading: false, yachtsLocations: yachtsLocations));
     } catch (e) {
       AppLogger.d('error: $e');
       emit(state.copyWith(isLoading: false));
@@ -87,6 +94,7 @@ class HomeCubit extends Cubit<HomeState> {
       getUserName(),
       getPromoBanner(),
       getPromoData(),
+      getYachtsLocations(),
     ]);
   }
 }

@@ -17,4 +17,9 @@ class YachtsRemoteDatasource {
     final response = await dio.get('/yachts/featured');
     return YachtsResponse.fromJson(response.data).list;
   }
+
+  Future<List<YachtLocationResponse>> getYachtsLocations() async {
+    final response = await dio.get('/yachts/locations');
+    return YachtsLocationsResponse.fromJson(response.data).list;
+  }
 }

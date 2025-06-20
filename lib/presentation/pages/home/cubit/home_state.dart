@@ -9,5 +9,6 @@ abstract class HomeState with _$HomeState {
     @Default('') String userName,
     @Default(null) PromoBanner? promoBanner,
     @Default(null) PromoData? promoData,
+    @Default([]) List<YachtLocation> yachtsLocations,
   }) = _HomeState;
 }

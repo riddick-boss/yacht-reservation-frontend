@@ -15,3 +15,13 @@ abstract class Yacht with _$Yacht {
     required bool isAvailable,
   }) = _Yacht;
 }
+
+@freezed
+abstract class YachtLocation with _$YachtLocation {
+  const factory YachtLocation({
+    required int id,
+    required String name,
+    required double latitude,
+    required double longitude,
+  }) = _YachtLocation;
+}

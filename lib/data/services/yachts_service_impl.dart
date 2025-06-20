@@ -22,6 +22,13 @@ class YachtsServiceImpl implements YachtsService {
     final yachtsResponse = await _yachtsRemoteDatasource.getFeaturedYachts();
     return _yachtMapper.toYachtList(yachtsResponse);
   }
+
+  @override
+  Future<List<YachtLocation>> getYachtsLocations() async {
+    final yachtsLocationsResponse =
+        await _yachtsRemoteDatasource.getYachtsLocations();
+    return _yachtMapper.toYachtLocationList(yachtsLocationsResponse);
+  }
 }
 
 @injectable
@@ -39,4 +46,21 @@ class YachtMapper {
     imageUrl: response.imageUrl,
     isAvailable: response.isAvailable,
   );
+
+  List<YachtLocation> toYachtLocationList(
+    List<YachtLocationResponse> response,
+  ) =>
+      response
+          .map(
+            (yachtLocationResponse) => toYachtLocation(yachtLocationResponse),
+          )
+          .toList();
+
+  YachtLocation toYachtLocation(YachtLocationResponse response) =>
+      YachtLocation(
+        id: response.id,
+        name: response.name,
+        latitude: response.latitude,
+        longitude: response.longitude,
+      );
 }

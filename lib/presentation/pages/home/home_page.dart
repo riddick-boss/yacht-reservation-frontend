@@ -63,7 +63,11 @@ class _HomeView extends StatelessWidget {
                     ),
                   ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(child: YachtsMapSection()),
+                SliverToBoxAdapter(
+                  child: YachtsMapSection(
+                    yachtsLocations: state.yachtsLocations,
+                  ),
+                ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverToBoxAdapter(child: QuickActionsWidget()),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
@@ -732,7 +736,8 @@ class PromoReservationSheet extends StatelessWidget {
 }
 
 class YachtsMapSection extends StatefulWidget {
-  const YachtsMapSection({super.key});
+  final List<YachtLocation> yachtsLocations;
+  const YachtsMapSection({super.key, required this.yachtsLocations});
 
   @override
   State<YachtsMapSection> createState() => _YachtsMapSectionState();
@@ -741,14 +746,21 @@ class YachtsMapSection extends StatefulWidget {
 class _YachtsMapSectionState extends State<YachtsMapSection> {
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> yachts = [
-      {'name': 'Sunseeker Predator 60', 'location': LatLng(43.7384, 7.4246)},
-      {'name': 'Azimut Grande 27', 'location': LatLng(43.2965, 5.3698)},
-      {'name': 'Princess V55', 'location': LatLng(44.4268, 26.1025)},
-    ];
+    final List<Map<String, dynamic>> yachts =
+        widget.yachtsLocations
+            .map(
+              (yacht) => {
+                'name': yacht.name,
+                'location': LatLng(yacht.latitude, yacht.longitude),
+              },
+            )
+            .toList();
     final points = yachts.map((y) => y['location'] as LatLng).toList();
     // Calculate bounds
-    LatLngBounds bounds = LatLngBounds(points.first, points.first);
+    LatLngBounds bounds = LatLngBounds(
+      points.firstOrNull ?? LatLng(43.2965, 5.3698),
+      points.firstOrNull ?? LatLng(43.2965, 5.3698),
+    );
     for (final p in points) {
       bounds.extend(p);
     }

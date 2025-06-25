@@ -1,58 +1,101 @@
-# yacht_reservation_frontend
+# 🛥️ Yacht Reservation App
 
-Flutter app for yacht reservation system
+**Yacht Reservation App** is a Flutter application that enhances the yacht booking experience.
 
-## Getting Started
+### ✨ Key Highlights
+- **Clean Architecture** with proper separation of concerns
+- **State Management** using BLoC pattern for predictable data flow
+- **Interactive Maps** for yacht location visualization
+- **Real-time Booking** with promotional system integration
+- **Cross-platform** support for iOS and Android
+- **Modern UI/UX** with nautical-inspired design
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 🖼️ Screenshots Gallery
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<div align="center">
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 📱 Mobile Screenshots
 
-## Project Setup
+| Home | Booking Flow | Reservations |
+|:---:|:---:|:---:|
+| ![Home](screenshots/home.png) | ![Reservation](screenshots/promo_reservation.png) | ![Booking](screenshots/upcoming_reservations.png) |
 
-1. Run `flutter pub get` to install dependencies
-2. Run `dart run build_runner build --delete-conflicting-outputs` to generate code
-3. Ready to go! 🚀
+| Profile | Interactive Map | Reservation Cards |
+|:---:|:---:|:---:|
+| ![Profile](screenshots/profile.png) | ![Map](screenshots/yachts.png) | ![Cards](screenshots/yachts_map.png) |
 
-## Used Libraries
+</div>
 
-### Core Dependencies
-- **Dependency Injection**
-  - `get_it`
-  - `injectable`
+---
 
-- **State Management**
-  - `flutter_bloc`
+## 🏗️ Architecture & Tech Stack
 
-- **Navigation**
-  - `go_router`
+### 🎯 Architecture Pattern
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Presentation Layer                       │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
+│  │   Pages     │ │   Widgets   │ │   BLoC      │          │
+│  └─────────────┘ └─────────────┘ └─────────────┘          │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     Domain Layer                            │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
+│  │   Models    │ │  Services   │ │   Use Cases │          │
+│  └─────────────┘ └─────────────┘ └─────────────┘          │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                      Data Layer                             │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
+│  │ Repository  │ │ DataSource  │ │   Network   │          │
+│  └─────────────┘ └─────────────┘ └─────────────┘          │
+└─────────────────────────────────────────────────────────────┘
+```
 
-- **Network**
-  - `dio`
-  - `json_annotation`
+### 🛠️ Technology Stack
 
-- **Storage**
-  - `shared_preferences`
+| Category | Technology |
+|----------|------------|
+| **Framework** | Flutter |
+| **Language** | Dart |
+| **State Management** | management |
+| **Navigation** | go_router |
+| **Dependency Injection** | get_it + injectable |
+| **Network** | Dio |
+| **Maps** | flutter_map |
+| **Storage** | shared_preferences | 
+| **Code Generation** | build_runner |
+| **Data Classes** | freezed | 3.0.6 |
 
-- **Utils**
-  - `logger`
-  - `freezed_annotation`
+## 🔧 Development Setup
 
-## Flutter useful commands
+### Prerequisites
+```bash
+# Required Software
+Flutter SDK: 3.7.2+
+Dart SDK: 3.0+
+Android Studio / VS Code
+iOS Simulator (macOS)
+Android Emulator
+```
 
-- flutter pub add
-- flutter pub add dev:
-- flutter pub remove
-- flutter pub outdated
-- flutter pub upgrade --major-versions
-- flutter pub get
-- dart run build_runner build --delete-conflicting-outputs
-- dart run build_runner clean
-- flutter test
+### Quick Start
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/yacht-reservation-frontend.git
+cd yacht-reservation-frontend
+
+# 2. Install dependencies
+flutter pub get
+
+# 3. Generate code
+dart run build_runner build --delete-conflicting-outputs
+
+# 4. Run the app
+flutter run
+```
+
+### Backend Integration
+This app requires the yacht reservation backend to be running. See the [backend repository](https://github.com/riddick-boss/yacht-reservation-backend) for setup instructions.
